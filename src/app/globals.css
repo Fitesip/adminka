@@ -10,9 +10,24 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-corange-1: rgba(241, 100, 46, 1);
+  --color-corange-2: rgba(196, 86, 44, 0.93);
+  --color-corange-3: rgba(252, 221, 157, 1);
+  --color-corange-4: rgba(255, 253, 243, 0.48);
+  --color-corange-5: rgba(241, 100, 46, 0.25);
+  --color-corange-6: rgba(255, 253, 243, 1);
+  --color-cred-1: rgba(255, 229, 229, 1);
+  --text-2-5xl: 32px;
+  --color-cgreen-1: rgba(163, 181, 101, 1);
+  --color-cgreen-2: rgba(252, 221, 157, 0.7);
+  --color-cgreen-3: rgba(255, 253, 243, 0.8);
+  --color-cgreen-4: rgba(225, 209, 140, 1);
+  --color-cwhite-1: rgba(255, 253, 243, 1);
+  --width-8xl: 1440px;
+
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
@@ -21,6 +36,7 @@
 
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Inter, sans-serif;
+  font-weight: 400;
+  color: var(--corange-1);
 }
