@@ -3,6 +3,7 @@ import Image from "next/image";
 import styles from "@/app/login/styles.module.scss";
 import React, {useState} from "react";
 import {useRouter} from "next/navigation";
+import Header from '@/components/Header';
 
 export default function Home() {
     const router = useRouter();
@@ -13,93 +14,59 @@ export default function Home() {
     const tabs = [
         {
             name: "Чаты",
+            url: "/",
             items: [
-                "Реакции",
-                "Стикеры",
-                "Подарки",
-                "Системные сообщения"
+                { title: "Реакции", url: "/" },
+                { title: "Стикеры", url: "/" },
+
+                { title: "Системные сообщения", url: "/" }
             ],
             nestedItems: [
-                "С кнопкой",
-                "Без кнопки"
+                { title: "С кнопкой", url: "/" },
+                { title: "Без кнопки", url: "/" }
             ]
         },
         {
             name: "Заметки",
+            url: "/",
             items: [
-
+                { title: "Теги", url: "/tags" }
             ]
         },
         {
             name: "Регистрация компаний",
+            url: "/",
             items: [
-                "Документы",
-                "Лимиты"
+                { title: "Документы", url: "/" },
+                { title: "Лимиты", url: "/" }
             ]
         },
         {
             name: "Маркетплейс",
+            url: "/",
             items: [
 
             ]
         },
         {
             name: "Услуги",
+            url: "/",
             items: [
 
             ]
         },
         {
             name: "Тарифы",
+            url: "/",
             items: [
-                "Премиум"
+                { title: "Премиум", url: "/" }
             ]
         }
     ];
+
     return (
         <div className="flex flex-col items-center min-h-screen">
-            <header className="bg-cgreen-1 text-cwhite-1 w-8xl rounded-4xl">
-                <nav className="container mx-auto flex items-center justify-between">
-                    <ul className="flex relative ml-12 text-xl">
-                        {tabs.map((tab, index) => (
-                            <li key={index} className="px-11 py-3 hover:bg-cgreen-2 relative group flex items-center justify-center"
-                                onMouseEnter={() => setActiveTab(index)}
-                                onMouseLeave={() => {
-                                    setActiveTab(null);
-                                    setActiveNestedItem(null);
-                                }}>
-                                <span className="cursor-pointer">{tab.name}</span>
-
-                                <div className={`absolute top-full left-0 w-full ${activeTab === index ? 'block' : 'hidden'}`}>
-                                    <ul className="bg-cwhite-1 text-cgreen-1 z-10 pt-1">
-                                        {tab.items.map((item, itemIndex) => (
-                                            <li
-                                                key={itemIndex}
-                                                className={`px-4 py-2 hover:bg-cgreen-4 hover:text-cwhite-1 relative text-center ${itemIndex === tab.items.length - 1 && tab.nestedItems ? 'group/nested' : ''}`}
-                                            >
-                                                {item}
-                                                {itemIndex === tab.items.length - 1 && tab.nestedItems && (
-                                                    <div className="absolute left-full top-0 hidden group-hover/nested:block">
-                                                        <ul className="bg-cwhite-1 text-cgreen-1 w-[150px] ml-1">
-                                                            {tab.nestedItems.map((nestedItem, nestedIndex) => (
-                                                                <li key={nestedIndex} className="px-4 py-2 hover:bg-cgreen-4 hover:text-cwhite-1 w-[150px]">
-                                                                    {nestedItem}
-                                                                </li>
-                                                            ))}
-                                                        </ul>
-                                                    </div>
-                                                )}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                    <button className="rounded-4xl border-cwhite-1 border-2 py-1 px-2 h-max text-xl" onClick={() => router.push('/login')}>Войти</button>
-                    <div className="bg-cwhite-1 w-20 rounded-4xl h-14"></div>
-                </nav>
-            </header>
+            <Header />
             <main className="mt-24 grow-1">
                 <h1 className="text-cgreen-1 text-5xl">Выберите страницу</h1>
             </main>

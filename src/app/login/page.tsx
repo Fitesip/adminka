@@ -3,6 +3,7 @@ import Image from "next/image";
 import styles from "./styles.module.scss";
 import React, { useState, ChangeEvent, FormEvent, FocusEvent } from "react";
 import {useRouter} from "next/navigation";
+import Header from '@/components/Header';
 
 type FormData = {
     email: string;
@@ -15,14 +16,16 @@ type FormErrors = {
     global: string;
 };
 
+
 export default function Home() {
     const router = useRouter();
-    const [formData, setFormData] = useState<FormData>({
+
+    const [formData, setFormData] = useState({
         email: '',
         password: '',
     });
 
-    const [errors, setErrors] = useState<FormErrors>({
+    const [errors, setErrors] = useState({
         email: '',
         password: '',
         global: '',
@@ -31,7 +34,7 @@ export default function Home() {
         status: '',
     })
 
-    // Проверка всех полей
+// Проверка всех полей
     const validateForm = (): boolean => {
         // Сначала сбрасываем все ошибки
         setErrors({
@@ -74,17 +77,17 @@ export default function Home() {
             document.getElementsByName('password')[0].className = document.getElementsByName('password')[0].className.replace("bg-cred-1 border-corange-1", "bg-corange-6 border-corange-3");
         }
 
-        setErrors(prev => ({ ...prev, ...newErrors }));
+        setErrors(prev => ({...prev, ...newErrors}));
         return Object.keys(newErrors).length === 0;
     };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        const {name, value} = e.target;
+        setFormData(prev => ({...prev, [name]: value}));
 
         // Сбрасываем ошибку при вводе
         if (errors.global) {
-            setErrors(prev => ({ ...prev, global: '' }));
+            setErrors(prev => ({...prev, global: ''}));
         }
     };
 
@@ -128,99 +131,10 @@ export default function Home() {
             }
         }
     }
-    const [activeTab, setActiveTab] = useState<number | null>(null);
-    const [activeNestedItem, setActiveNestedItem] = useState<number | null>(null);
 
-    const tabs = [
-        {
-            name: "Чаты",
-            items: [
-                "Реакции",
-                "Стикеры",
-                "Подарки",
-                "Системные сообщения"
-            ],
-            nestedItems: [
-                "С кнопкой",
-                "Без кнопки"
-            ]
-        },
-        {
-            name: "Заметки",
-            items: [
-
-            ]
-        },
-        {
-            name: "Регистрация компаний",
-            items: [
-                "Документы",
-                "Лимиты"
-            ]
-        },
-        {
-            name: "Маркетплейс",
-            items: [
-
-            ]
-        },
-        {
-            name: "Услуги",
-            items: [
-
-            ]
-        },
-        {
-            name: "Тарифы",
-            items: [
-                "Премиум"
-            ]
-        }
-    ];
     return (
-        <div className="flex flex-col items-center">
-            <header className="bg-cgreen-1 text-cwhite-1 w-8xl rounded-4xl">
-                <nav className="container mx-auto flex items-center justify-between">
-                    <ul className="flex relative ml-12 text-xl">
-                        {tabs.map((tab, index) => (
-                            <li key={index} className="px-11 py-3 hover:bg-cgreen-2 relative group flex items-center justify-center"
-                                onMouseEnter={() => setActiveTab(index)}
-                                onMouseLeave={() => {
-                                    setActiveTab(null);
-                                    setActiveNestedItem(null);
-                                }}>
-                                <span className="cursor-pointer">{tab.name}</span>
-
-                                <div className={`absolute top-full left-0 w-full ${activeTab === index ? 'block' : 'hidden'}`}>
-                                    <ul className="bg-cwhite-1 text-cgreen-1 z-10 pt-1">
-                                        {tab.items.map((item, itemIndex) => (
-                                            <li
-                                                key={itemIndex}
-                                                className={`px-4 py-2 hover:bg-cgreen-4 hover:text-cwhite-1 relative text-center ${itemIndex === tab.items.length - 1 && tab.nestedItems ? 'group/nested' : ''}`}
-                                            >
-                                                {item}
-                                                {itemIndex === tab.items.length - 1 && tab.nestedItems && (
-                                                    <div className="absolute left-full top-0 hidden group-hover/nested:block">
-                                                        <ul className="bg-cwhite-1 text-cgreen-1 w-[150px] ml-1">
-                                                            {tab.nestedItems.map((nestedItem, nestedIndex) => (
-                                                                <li key={nestedIndex} className="px-4 py-2 hover:bg-cgreen-4 hover:text-cwhite-1 w-[150px]">
-                                                                    {nestedItem}
-                                                                </li>
-                                                            ))}
-                                                        </ul>
-                                                    </div>
-                                                )}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                    <button className="rounded-4xl border-cwhite-1 border-2 py-1 px-2 h-max text-xl">Войти</button>
-                    <div className="bg-cwhite-1 w-20 rounded-4xl h-14"></div>
-                </nav>
-            </header>
+        <div className="flex flex-col items-center min-h-screen">
+            <Header />
             <main className="mt-24">
                 <div
                     className="bg-corange-4 border-corange-5 border-2 flex flex-col items-center w-[756px] min-h-[744px] p-5">
