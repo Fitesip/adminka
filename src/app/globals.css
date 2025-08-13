@@ -5,6 +5,12 @@
   --foreground: #171717;
 }
 
+.transition-1 {
+  transition-property: all;
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(2,0,0.1,0.5)
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -17,6 +23,7 @@
   --color-corange-5: rgba(241, 100, 46, 0.25);
   --color-corange-6: rgba(255, 253, 243, 1);
   --color-cred-1: rgba(255, 229, 229, 1);
+  --color-cred-2: rgba(210, 57, 57, 1);
   --text-2-5xl: 32px;
   --color-cgreen-1: rgba(163, 181, 101, 1);
   --color-cgreen-2: rgba(252, 221, 157, 0.7);
@@ -26,7 +33,14 @@
   --color-cgreen-5: rgba(163, 181, 101, 0.84);
   --color-corange-7: rgba(241, 101, 47, 0.62);
   --width-8xl: 1440px;
+}
+.react-colorful {
 
+  transition: 0.5s ease;
+}
+
+.loading {
+  animation: spin 2s infinite linear;
 }
 
 @media (prefers-color-scheme: light) {

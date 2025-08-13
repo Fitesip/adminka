@@ -1,10 +1,13 @@
-import React, {useState} from "react";
+'use client'
+import React, {useState, useEffect} from "react";
 import {useRouter} from "next/navigation";
+import {refreshToken} from "@/lib/refreshToken";
 
 export default function Header() {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState<number | null>(null);
     const [activeNestedItem, setActiveNestedItem] = useState<number | null>(null);
+    const [activeLogin, setActiveLogin] = useState<boolean>(false);
     const handleTabClick = (url: string) => {
         console.log('tab')
         router.push(url);
@@ -12,16 +15,27 @@ export default function Header() {
 
     // Обработчик клика по подпункту
     const handleItemClick = (url: string) => {
-        console.log('item')
         router.push(url);
         setActiveTab(null); // Закрываем выпадающее меню
     };
+    useEffect(() => {
+        const token = sessionStorage.getItem("token");
+        if (token === null) {
+            if (localStorage.getItem('refresh') === 'true') {
+                refreshToken()
+                setActiveLogin(true);
+            }
+        }
+        else {
+            setActiveLogin(true);
+        }
+    }, []);
     const tabs = [
         {
             name: "Чаты",
             url: "/",
             items: [
-                { title: "Реакции", url: "/" },
+                { title: "Реакции", url: "/chats/reactions" },
                 { title: "Стикеры", url: "/" },
 
                 { title: "Системные сообщения", url: "/" }
@@ -35,7 +49,7 @@ export default function Header() {
             name: "Заметки",
             url: "/",
             items: [
-                { title: "Теги", url: "/tags" }
+                { title: "Теги", url: "/notes/tags" }
             ]
         },
         {
@@ -68,6 +82,13 @@ export default function Header() {
             ]
         }
     ];
+    const logout = () => {
+        setActiveLogin(false);
+        localStorage.removeItem("refresh");
+        localStorage.removeItem("role")
+        sessionStorage.removeItem("token");
+        router.push("/login");
+    }
     return (
     <header className="bg-cgreen-1 text-cwhite-1 w-8xl rounded-4xl">
         <nav className="container mx-auto flex items-center justify-between">
@@ -120,9 +141,15 @@ export default function Header() {
                     </li>
                 ))}
             </ul>
-            <button className="rounded-4xl border-cwhite-1 border-2 py-1 px-2 h-max text-xl"
-                    onClick={() => router.push('/login')}>Войти
-            </button>
+            {activeLogin && (
+                <button className="rounded-4xl border-cwhite-1 border-2 py-1 px-2 h-max text-xl hover:bg-cgreen-2 transition-all"
+                        onClick={() => logout()}>Выйти</button>
+            )}
+            {!activeLogin && (
+                <button className="rounded-4xl border-cwhite-1 border-2 py-1 px-2 h-max text-xl hover:bg-cgreen-2 transition-all"
+                        onClick={() => router.push('/login')}>Войти</button>
+            )}
+
             <div className="bg-cwhite-1 w-20 rounded-4xl h-14"></div>
         </nav>
     </header>

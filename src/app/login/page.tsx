@@ -30,9 +30,8 @@ export default function Home() {
         password: '',
         global: '',
     });
-    const [loginStatus, setLoginStatus] = useState({
-        status: '',
-    })
+    const [loginStatus, setLoginStatus] = useState<string | null>(null)
+    const [remember, setRemember] = useState<string | null>(null)
 
 // Проверка всех полей
     const validateForm = (): boolean => {
@@ -100,24 +99,29 @@ export default function Home() {
         if (validateForm()) {
             document.getElementsByName('login')[0].className += ' bg-corange-2';
             document.getElementsByName('login')[0].innerHTML = '<img src="/loading.gif" alt="loading"/>'
+            const email = formData.email;
+            const password = formData.password;
             try {
                 const response = await fetch('https://testapi.animalmore.ru/auth/auth/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({email: formData.email, password: formData.password}),
+                    body: JSON.stringify({email, password}),
                     credentials: 'include'
                 })
                 const json = await response.json();
 
                 if (response.status === 200) {
-                    localStorage.setItem('token', json.accessToken);
+                    sessionStorage.setItem('token', json.accessToken);
+                    if (remember) {
+                        localStorage.setItem('refresh', remember)
+                    }
                     localStorage.setItem('role', json.user.role);
                     router.push('/login/success')
                 }
                 else if (response.status === 401) {
-                    setLoginStatus(prev => ({...prev, status: 'Неправильный логин или пароль'}))
+                    setLoginStatus(prev => ('Неправильный логин или пароль'))
                 }
                 else if (response.status === 403) {
                     router.push('/login/success')
@@ -131,6 +135,16 @@ export default function Home() {
             }
         }
     }
+
+    const rememberMe = (e: ChangeEvent<HTMLInputElement>): void => {
+        if (remember) {
+            setRemember(null)
+        }
+        else {
+            setRemember("true");
+        }
+    }
+
 
     return (
         <div className="flex flex-col items-center min-h-screen">
@@ -152,8 +166,8 @@ export default function Home() {
                         </p>
                     </div>
                     <form className="flex flex-col gap-11 text-xl mt-10" onSubmit={handleSubmit}>
-                        {loginStatus.status && (
-                            <p className="text-red-500 text-xl text-center">{loginStatus.status}</p>
+                        {loginStatus && (
+                            <p className="text-red-500 text-xl text-center">{loginStatus}</p>
                         )}
                         <label htmlFor="email" className="text-xl flex flex-col gap-3.5">Логин
                             <input type="text" required placeholder="admin@gmail.com" name="email"
@@ -180,7 +194,8 @@ export default function Home() {
                         <label htmlFor="remember-me"
                                className="flex flex-row-reverse self-start gap-4 items-center">Запомнить вход
                             <input type="checkbox" name="remember-me"
-                                   className="appearance-none w-11 h-11 border-2 border-corange-3 rounded-sm checked:bg-corange-1 checked:border-corange-3 checked:rounded-4xl transition-all"/>
+                                   className="appearance-none w-11 h-11 border-2 border-corange-3 rounded-sm checked:bg-corange-1 checked:border-corange-3 checked:rounded-4xl transition-all"
+                            onChange={rememberMe}/>
                         </label>
                         <button type="submit" name="login"
                                 className="bg-corange-1 text-white border-corange-3 border-2 rounded-sm pb-5 pt-5 w-auto flex justify-center transition-all hover:bg-corange-2 text-2xl">Вход
